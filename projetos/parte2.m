@@ -17,7 +17,7 @@ pzmap(sysD1);
 k = (log(1-0.9))/(log(0.9048));
 %Valor encontrado analiticamente: k = 33
 %% Representação em E.E 
-% representação controlavel e observável 
+% Matriz de obsrevabilidade e Controlabilidade 
 Co = ctrb(sysD1.A, sysD1.B);
 Ob = obsv(sysD1.A, sysD1.C);
 
