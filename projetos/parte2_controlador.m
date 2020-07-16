@@ -17,15 +17,17 @@ step(sys2);
 % Para o sistema 1, utilizemos a ZOH e a Aproximacao bilinear de Tustin
 % para gerar a comparacao das nossas discretizacoes
 z = tf('z', 0.1);
-sysD1 = 1/((((20*(z-1))/(z+1))+1)*((20*(z-1))/(z+1)+2));
+sysDd1 = 1/((((20*(z-1))/(z+1))+1)*((20*(z-1))/(z+1)+2));
 %controlador discretizado (aproximacao bilinear)
 Cd1 = 5*((20*(z-1))/(z+1))+61.24;
-sysD1 = (sysD1*Cd1)/(1+sysD1*Cd1);
+sysD1 = (sysDd1*Cd1)/(1+sysDd1*Cd1);
 figure(3);
 step(sysD1);
 hold on;
 sysD1Zoh = c2d (sys1, 0.1);
 step(sysD1Zoh);
+deadB = 1/z;
+step(deadB);
 hold off;
 %% Para o sistema 2
 sysD2 = 1/((((20*(z-1))/(z+1))-1)*((20*(z-1))/(z+1)+2));
@@ -37,5 +39,6 @@ step(sysD2);
 hold on;
 sysD2Zoh = c2d (sys2, 0.1);
 step(sysD2Zoh);
+step(deadB);
 hold off;
 

@@ -43,7 +43,7 @@ x1=zeros(2, N);
 y1=zeros(1, N);
 for i = 2:N
     x1(:,i) = sysD1.A*x1(:,i-1) + sysD1.B*u1(i-1);
-    y1(i) = C1*x1(:,i) + D1*u1(i);
+    y1(i) = sysD1.C*x1(:,i) + sysD1.D*u1(i);
 end
 stem(n,y1);
 hold on;
@@ -51,6 +51,6 @@ x1=zeros(2, N);
 y1=zeros(1, N);
 for i = 2:N
     x1(:,i) = sysD1.A*x1(:,i-1) + sysD1.B*u2(i-1);
-    y1(i) = C1*x1(:,i) + D1*u2(i);
+    y1(i) = sysD1.C*x1(:,i) + sysD1.D*u2(i);
 end
 stem(n,y1);
