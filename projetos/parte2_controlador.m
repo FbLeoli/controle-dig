@@ -6,7 +6,7 @@ C1 = 5*s+61.24;
 sys1 = (sysC1*C1)/(1+sysC1*C1);
 figure(1);
 step(sys1);
-%% Sistema 1
+%% Sistema 2
 sysC2 = 0.5/((s-1)*(s+2));
 C2 = (125*(s-1)*(s+2))/(s*(s+8));
 sys2 = (sysC2*C2)/(1+sysC2*C2);
@@ -41,4 +41,6 @@ sysD2Zoh = c2d (sys2, 0.1);
 step(sysD2Zoh);
 step(deadB);
 hold off;
+
+
 
