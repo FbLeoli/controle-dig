@@ -83,3 +83,42 @@ plot(p, y2);
 hold on;
 plot(p, y2obtido);
 hold off;
+
+%% identificacao de sistemas
+sysC1 = 0.5/((s-1)*(s+2));
+N = 100;
+sysD1 = c2d(ss(sysC1), 0.1);
+u = -10 + (20)*rand(N, 1);
+x1 = zeros(2, N);
+[y1,y1obtido] = deal(zeros(1, N));
+n = 2;
+m = 2;
+y1m = zeros(1, N+m);
+um = zeros(1, N+n);
+p = 1:N;
+for i = 1:N-1
+    x1(:,i+1) = sysD1.A*x1(:,i) + sysD1.B*u(i);
+    y1(i) = sysD1.C*x1(:,i) + sysD1.D*u(i);
+end
+y1(N) = sysD1.C*x1(:,N) + sysD1.D*u(N);
+A = zeros(N, 4);
+for i = 1+m:N+m
+    y1m(1, i) = y1(1, i-m);
+    um(1, i) = u(i-n, 1);
+end    
+A(:, 1) = um(1, 2:N+1);
+A(:, 2) = um(1, 3:N+2);
+A(:, 4) = -y1m(1, 1:N);
+A(:, 3) = -y1m(1, 2:N+1);
+
+Mat = ((A'*A)\A');
+coef = Mat*y1';
+%% plotando
+for i = 3:N-2
+    y1obtido(1, i) = coef(1, 1)*u(i-1, 1) + coef(2, 1)*u(i-2, 1) - coef(3,1)*y1obtido(1, i-1) - coef(4,1)*y1obtido(1, i-2); 
+end
+figure(3);
+plot(p, y1);
+hold on;
+plot(p, y1obtido);
+hold off;

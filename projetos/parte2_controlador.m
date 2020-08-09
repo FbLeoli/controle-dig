@@ -8,7 +8,7 @@ figure(1);
 step(sys1);
 %% Sistema 2
 sysC2 = 0.5/((s-1)*(s+2));
-C2 = (125*(s-1)*(s+2))/(s*(s+8));
+C2 = pid(32.3, -39.76, 7.46);
 sys2 = (sysC2*C2)/(1+sysC2*C2);
 figure(2);
 step(sys2);
@@ -29,18 +29,39 @@ step(sysD1Zoh);
 deadB = 1/z;
 step(deadB);
 hold off;
-%% Para o sistema 2
-sysD2 = 1/((((20*(z-1))/(z+1))-1)*((20*(z-1))/(z+1)+2));
-%controlador discretizado (aproximacao bilinear)
-Cd2 = (125*(((20*(z-1))/(z+1))-1)*(((20*(z-1))/(z+1))+2))/(((20*(z-1))/(z+1))*(((20*(z-1))/(z+1))+8));
-sysD2 = (sysD2*Cd2)/(1+sysD2*Cd2);
+% %% Para o sistema 2
+sysD2 = c2d(sysC2, 0.1, 'tustin');
+C2d = 32.3 - 39.76*(0.1/2)*((z+1)/(z-1)) + 7.46*(2/0.1)*((z-1)/(z+1));
+sysD2 = feedback(C2d*sysD2, 1);
 figure(4);
+sysD2Zoh = c2d (sys2, 0.1);
 step(sysD2);
 hold on;
-sysD2Zoh = c2d (sys2, 0.1);
 step(sysD2Zoh);
 step(deadB);
 hold off;
+%% Analise da entrada de controle 
+figure(5);
+PID1 = c2d(pid(61.24, 0, 5), 0.1, 'tustin');
+sys1 = PID1/(1+PID1*c2d(sysC1, 0.1, 'tustin'));
+step(sys1, 1.5);
+hold on;
 
+dB = 1/(c2d(sysC1, 0.1)*(z-1));
+sys1 = dB/(1 + dB*c2d(sysC1, 0.1));
+step(sys1, 1.5);
+hold off
+
+%% Para o sistema 2
+figure(6);
+PID2 = C2d;
+sys2 = PID2/(1+PID2*c2d(sysC2, 0.1, 'tustin'));
+step(sys2, 1.5);
+hold on;
+
+dB2 = 1/(c2d(sysC2, 0.1)*(z-1));
+sys2 = dB2/(1 + dB2*c2d(sysC2, 0.1));
+step(sys2, 1.5);
+hold off
 
 
